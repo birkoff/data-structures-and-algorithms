@@ -26,30 +26,51 @@ class Graph:
             for neighbour in self.graph_dict[node]:
                 print("(",node,", ",neighbour,")")
 
-    def find_path(self, start, end, path=[]):
+    def depth_first_search(self, start, end, path=[]):
         path.append(start)
 
         if start == end:
             return path
 
-        for node in self.graph_dict[start]:
+        for node in self.graph_dict[start]:  # Iterate the graph_dict values (neighbours)
             if node not in path:
-                new_path = self.find_path(node, end, path)
+                new_path = self.depth_first_search(node, end, path)  # change to new key on graph_dict
                 if new_path:
                     return new_path
                 return None
 
+    def breath_first_search(self, item):
+        visited = {}
 
-g= Graph()
-g.add_edge('A', 'B')
-g.add_edge('A', 'C')
-g.add_edge('B', 'C')
-g.add_edge('B', 'D')
-g.add_edge('B', 'A')
-g.add_edge('C', 'A')
-g.add_edge('C', 'B')
-g.add_edge('C', 'D')
-g.add_edge('D', 'C')
-g.show_edges()
-print(g.graph_dict)
-print(g.find_path('D', 'A'))
+        for i in self.graph_dict:
+            visited[i] = False
+
+        queue = [item]
+        visited[item] = True
+
+        while len(queue) > 0:
+            item = queue.pop(0)
+            for node in self.graph_dict[item]:
+                if not visited[node]:
+                    visited[node] = True
+                    queue.append(node)
+                    print(item, end=" ")
+
+
+
+
+if __name__ == '__main__':
+    g = Graph()
+    g.add_edge('A', 'B')
+    g.add_edge('A', 'C')
+    g.add_edge('B', 'C')
+    g.add_edge('B', 'D')
+    g.add_edge('B', 'A')
+    g.add_edge('C', 'A')
+    g.add_edge('C', 'B')
+    g.add_edge('C', 'D')
+    g.add_edge('D', 'C')
+    g.show_edges()
+    print(g.graph_dict)
+    print(g.depth_first_search('D', 'A'))
+    g.breath_first_search('D')

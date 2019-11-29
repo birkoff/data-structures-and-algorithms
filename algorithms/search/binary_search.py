@@ -1,4 +1,4 @@
-def binary_search(arr,item):
+def binary_search(arr, item):
     left = 0
     right = len(arr) - 1
 
@@ -10,7 +10,7 @@ def binary_search(arr,item):
             return True
 
         if item < arr[mid]:
-            right = mid - 1 # if item is less than middle move right to the middle - 1
+            right = mid - 1  # if item is less than middle move right to the middle - 1
         else:
             left = mid + 1  # if item is more than middle move left to the middle + 1
 
