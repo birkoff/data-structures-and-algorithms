@@ -1,59 +1,97 @@
 class LinkedList:
-    def __init__(self):
+    def __init__(self, head=None):
         self.length = 0
-        self.current = None
+        self.head = head
 
-    def append(self, val, after=None):
-        node = Node(val)
+    def add(self, data):
+        """
+        Inserts at the begining on the List
+        node.prev = None
+        node.next = self.head
+        """
+        new_node = Node(data)
+        new_node.prev = None
+
         self.length = self.length + 1
 
-        if after is None:
-            if self.current:
-                node.next = self.current
+        if self.head:
+            new_node.next = self.head
+            new_node.next.prev = new_node
 
-            self.current = node
-        else:
-            current = self.current
-            match = False
-            while current:
-                if current.val == after:
-                    match = True
-                    break
+        self.head = new_node
 
+    def insert(self, data, position):
+        new_node = Node(data)
+        match = False
+        current = self.head
+        i = 0
+        while current and match is False:
+            if i == position:
+                match = True
+                new_node.next = current.next
+                new_node.prev = current
+                current.next = new_node
+                self.length = self.length + 1
+            else:
                 current = current.next
+            i += 1
+        return current
 
-            if not match:
-                return
+    def insert_after(self, data, after):
+        """
+        Inserts at specific position on the List
+        new_node.prev = after
+        new_node.next = after.next
+        new_node.prev.next = new_node
+        new_node.next.prev = new_node
+        """
+        new_node = Node(data)
+        match = False
+        current = self.head
+        while current and match is False:
+            if current.data == after:
+                match = True
+                new_node.next = current.next
+                new_node.prev = current
+                current.next = new_node
+                self.length = self.length + 1
+            else:
+                current = current.next
+        return current
 
-            node.next = current.next
-            current.next = node
+    def append(self, data):
+        """
+        Inserts at the End of the List
+        node.prev = self.head
+        node.next = None
+        """
+        new_node = Node(data)
+        new_node.next = None
+        new_node.prev = None
 
-            self.length = self.length + 1
-
-    def add(self, val):
-        node = Node(val)
         self.length = self.length + 1
 
-        if not self.current:
-            self.current = node
+        if self.head is None:
+            self.head = new_node
             return
 
-        current = self.current
+        current = self.head
         while current.next:
             current = current.next
 
-        current.next = node
+        new_node.prev = current
+        current.next = new_node
 
-    def remove(self, val):
-        if not self.current:
+    def remove(self, data):
+        if not self.head:
             return
 
-        current = self.current
+        current = self.head
         prev = None
 
         match = False
         while current:
-            if current.val == val:
+            if current.data == data:
                 match = True
                 break
 
@@ -68,16 +106,16 @@ class LinkedList:
         current = None
 
     def traverse(self):
-        current = self.current
+        current = self.head
         list = []
         while current:
-            next_val = current.next.val if current.next else None
-            list.append("{} -> {}".format(current.val, next_val))
+            # next_data = current.next.data if current.next else None
+            list.append("{}".format(current.data))
             current = current.next
-        print(list)
+        return list
 
     def has_cycle(self):
-        head = self.current
+        head = self.head
         prev = None
         while head:
             if (prev and head.next and prev == head.next) or hasattr(head, 'visited'):
@@ -92,30 +130,34 @@ class LinkedList:
 
 
 class Node:
-    def __init__(self, val=None):
-        self.val = val
+    def __init__(self, data=None):
+        self.data = data
         self.next = None
+        self.prev = None
 
     def __str__(self):
-        return str(self.val)
+        return str(self.data)
 
 
 if __name__ == '__main__':
     mylist = LinkedList()
-    mylist.add("one")
-    mylist.add("two")
-    mylist.add("three")
-    mylist.add("four")
-    mylist.add("five")
-    mylist.add("six")
-    mylist.add("seven")
-    mylist.add("eight")
-    mylist.add("nine")
-    mylist.add("ten")
-    mylist.traverse()
-    mylist.remove("five")
-    mylist.remove("eight")
-    mylist.traverse()
-    mylist.append("five", after="four")
-    mylist.append("seven", after="seven")
-    mylist.traverse()
+    mylist.append("16")
+    mylist.append("13")
+    mylist.append("7")
+    # mylist.add("four")
+    # mylist.append("five")
+    # mylist.append("six")
+    # mylist.append("seven")
+    # mylist.append("eight")
+    # mylist.add("nine")
+    # mylist.append("ten")
+    # mylist.traverse()
+    # mylist.remove("eight")
+    # mylist.remove("five")
+    # mylist.traverse()
+    mylist.insert("nine", after="eight")
+    # mylist.insert("four", after="three")
+
+    for item in mylist.traverse():
+        print(item, end=' ')
+
